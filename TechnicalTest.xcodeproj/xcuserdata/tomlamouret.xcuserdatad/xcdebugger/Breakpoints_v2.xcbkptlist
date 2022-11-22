@@ -3,39 +3,4 @@
    uuid = "5855458A-1D39-48CA-ABCB-B088EE0A80BB"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B4E6F5A3-5325-4DB6-AB9F-560CCAFB8615"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TechnicalTest/main.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "main(argc, argv)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BA4595DD-3116-49C0-AEF9-627260F83BE2"
-            shouldBeEnabled = "No"
-            condition = "EndTime = 12 &amp;&amp; "
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TechnicalTest/SegmentPeriodMgr_c.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "SegmentPeriodMgr_c::FindCommonIntervals(SegmentPeriodMgr, SegmentSet)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

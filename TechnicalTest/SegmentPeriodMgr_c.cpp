@@ -28,63 +28,27 @@ std::vector<SegmentPeriod_c> SegmentPeriodMgr_c::GetById(const std::string &Segm
 
 std::vector<std::pair<int, int>> SegmentPeriodMgr_c::FindCommonIntervals(const SegmentPeriodMgr_c& SegmentPeriodMgr, const std::set<std::string>& SegmentSet)
 {
+    // SetsToSearch will contain all the intervals to compare separated in different vectors representing the different sets.
     std::vector<std::vector<SegmentPeriod_c>> SetsToSearch;
+    
+    // Indexes will allow to keep track of which interval is to be compared within the vector of different intervals of a set.
     std::vector<int> Indexes;
+    
     std::set<std::string>::iterator SetItr;
+    
     for (SetItr = SegmentSet.begin(); SetItr != SegmentSet.end(); ++SetItr)
     {
         std::vector<SegmentPeriod_c> SpecificSet = SegmentPeriodMgr.GetById(*SetItr);
-        // Sort the vector so that the intervals are in chronological order. I could override the sort() function to be able to sort vectors of SegmentPeriod_c objects.
+        
+        // Sort the vector so that the intervals are in chronological order. Overrode the less than operator function of SegmentPeriod_c to make std::sort() work.
         sort(SpecificSet.begin(), SpecificSet.end());
+        
         // Adds the sorted intervals from one of the specified sets to SetsToSearch.
         SetsToSearch.push_back(SpecificSet);
+        
         // Initializes the indexes to 0.
         Indexes.push_back(0);
     }
-    
-    // This block would allow to find the first common interval; the actual solution should only contain one nested loop
-    //    int MinEndTime = SetsToSearch[0][0].EndTime();
-    //    int SmallestFirstIntervalIndex = 0;
-    //    for (int i = 0; 0 < SetsToSearch.size(); ++i)
-    //    {
-    //        if (SetsToSearch[i][0].EndTime() < MinEndTime)
-    //        {
-    //            MinEndTime = SetsToSearch[i][0].EndTime();
-    //            SmallestFirstIntervalIndex = i;
-    //        }
-    //    }
-    //    CommonIntervals.push_back(std::make_pair(SetsToSearch[SmallestFirstIntervalIndex][0].StartTime(), SetsToSearch[SmallestFirstIntervalIndex][0].EndTime()));
-    //    Indexes[SmallestFirstIntervalIndex]++;
-    //    while (true)
-    //    {
-    //        // First interval of the first set
-    //        int StartTime = SetsToSearch[0][Indexes[0]].StartTime();
-    //        int EndTime = SetsToSearch[0][Indexes[0]].EndTime();
-    //
-    //        bool AddCommonInterval = true;
-    //
-    //        // Check rest of the intervals and find the intersection
-    //        for (int i = 1; i < SetsToSearch.size(); i++) {
-    //
-    //            // If no intersection exists
-    //            if (SetsToSearch[i][Indexes[i]].StartTime() > EndTime || SetsToSearch[i][Indexes[i]].EndTime() < StartTime) {
-    //                Indexes[i]++;
-    //                AddCommonInterval = false;
-    //                break;
-    //            }
-    //
-    //            // Else update the intersection
-    //            else {
-    //                StartTime = std::max(StartTime, SetsToSearch[i][Indexes[i]].StartTime());
-    //                EndTime = std::min(EndTime, SetsToSearch[i][Indexes[i]].EndTime());
-    //            }
-    //        }
-    //
-    //        if (AddCommonInterval)
-    //        {
-    //            CommonIntervals.push_back(std::make_pair(SetsToSearch[][].StartTime(), SetsToSearch[][].EndTime()));
-    //        }
-    //    }
     
     std::vector<std::pair<int, int>> CommonIntervals;
     bool NotLastLoop = true;
@@ -95,21 +59,26 @@ std::vector<std::pair<int, int>> SegmentPeriodMgr_c::FindCommonIntervals(const S
         int i = 0;
         bool AddCommonInterval = true;
         
-        // Check rest of the intervals and find the intersection
         while (i < SetsToSearch.size()) {
             if (i == 0)
             {
-                // First interval of the first set
+                // Current interval of the first set
                 StartTime = SetsToSearch[i][Indexes[i]].StartTime();
                 EndTime = SetsToSearch[i][Indexes[i]].EndTime();
             }
             
-            // If no intersection exists
+            // No intersection found.
             else if (SetsToSearch[i][Indexes[i]].StartTime() >= EndTime || SetsToSearch[i][Indexes[i]].EndTime() <= StartTime) {
+                
+                // This is to avoid an out-of-bounds exception.
                 if (Indexes[i] == SetsToSearch[i].size() - 1)
                 {
+                    
+                    // This if-else statement ensures that Indexes[0] can be incremented.
                     if (Indexes[i - 1] == SetsToSearch[i - 1].size() - 1)
                     {
+                        
+                        // No more intervals to compare.
                         NotLastLoop = false;
                     }
                     else
@@ -125,7 +94,7 @@ std::vector<std::pair<int, int>> SegmentPeriodMgr_c::FindCommonIntervals(const S
                 break;
             }
             
-            // Else update the intersection
+            // Updates the intersection.
             else {
                 StartTime = std::max(StartTime, SetsToSearch[i][Indexes[i]].StartTime());
                 EndTime = std::min(EndTime, SetsToSearch[i][Indexes[i]].EndTime());
@@ -136,6 +105,8 @@ std::vector<std::pair<int, int>> SegmentPeriodMgr_c::FindCommonIntervals(const S
         if (AddCommonInterval)
         {
             CommonIntervals.push_back(std::make_pair(StartTime, EndTime));
+            
+            // The extra decrementation of i cancels out the final incrementation of i in the preceding while loop.
             if (Indexes[i - 1] == SetsToSearch[i - 1].size() - 1)
             {
                 if (Indexes[i - 2] == SetsToSearch[i - 2].size() - 1)
