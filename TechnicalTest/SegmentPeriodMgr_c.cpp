@@ -35,7 +35,7 @@ std::vector<std::pair<int, int>> SegmentPeriodMgr_c::FindCommonIntervals(const S
     {
         std::vector<SegmentPeriod_c> SpecificSet = SegmentPeriodMgr.GetById(*SetItr);
         // Sort the vector so that the intervals are in chronological order. I could override the sort() function to be able to sort vectors of SegmentPeriod_c objects.
-        //sort(SpecificSet.begin(), SpecificSet.end());
+        sort(SpecificSet.begin(), SpecificSet.end());
         // Adds the sorted intervals from one of the specified sets to SetsToSearch.
         SetsToSearch.push_back(SpecificSet);
         // Initializes the indexes to 0.
